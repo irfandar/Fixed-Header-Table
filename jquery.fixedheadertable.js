@@ -307,10 +307,19 @@
        */
       _isTable: function($obj) {
         var $self = $obj,
-            hasTable = $self.is('table'),
-            hasThead = $self.find('thead').length > 0,
-            hasTbody = $self.find('tbody').length > 0;
+          hasTable = $self.is('table'),
+          hasThead = $self.find('thead').length > 0,
+          hasTbody = $self.find('tbody').length > 0,
+          createThead = $self.hasClass('nothead');
 
+        // tables without a thead
+        // create thead out of the first row
+        // if nothead class is specified
+        if (hasTable && !hasThead && createThead) {
+            $self.prepend($('<thead></thead>').append($self.find('tr:first').remove()));
+            hasThead = true;
+        }
+                
         if (hasTable && hasThead && hasTbody) {
           return true;
         }
